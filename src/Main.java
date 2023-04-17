@@ -7,23 +7,25 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) throws IOException {
         Scanner scanner = new Scanner(new File("INPUT.txt"));
-        int n = scanner.nextInt();
+        int n = Integer.parseInt(scanner.nextLine());
+        String tTS = scanner.nextLine();
+        String sT = scanner.nextLine();
+        scanner.close();
         ArrayList<Gnome> gnomes = new ArrayList<>();
         for (int i = 0; i < n; i++) {
-            gnomes.add(i, new Gnome(i + 1));
-            gnomes.get(i).a = scanner.nextInt();
+            gnomes.add(new Gnome(i + 1));
+            gnomes.get(i).a = Integer.parseInt(tTS.split(" ")[i]);
+            gnomes.get(i).b = Integer.parseInt(sT.split(" ")[i]);
         }
-        for (int i = 0; i < n; i++) {
-            gnomes.get(i).b = scanner.nextInt();
-        }
-        scanner.close();
         gnomes.sort(Gnome::compareTo);
+        int firstTTS = gnomes.get(0).a;
+        int firstST = gnomes.get(0).b;
         String out_str = "";
         int comeToBedTotalTime = 0;
         for (Gnome g :
                 gnomes) {
             comeToBedTotalTime += g.a;
-            if (comeToBedTotalTime - gnomes.get(0).a < gnomes.get(0).b) {
+            if (comeToBedTotalTime - firstTTS < firstST) {
                 out_str += g.index + " ";
             } else {
                 out_str = "-1";
@@ -36,7 +38,7 @@ public class Main {
     }
 }
 
-class Gnome implements Comparable{
+class Gnome {
     public int a, b;
     public int index;
 
@@ -44,8 +46,7 @@ class Gnome implements Comparable{
         this.index = index;
     }
 
-    @Override
     public int compareTo(Object o) {
-        return (((Gnome)o).b - a) - (b - ((Gnome)o).a);
+        return (((Gnome) o).b - a) - (b - ((Gnome) o).a);
     }
 }
