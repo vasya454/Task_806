@@ -1,5 +1,9 @@
 import java.io.File;
 import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Scanner;
 
 /*
@@ -36,27 +40,56 @@ public class Main {
         try {
             Scanner scanner = new Scanner(new File("INPUT.txt"));
             int n = scanner.nextInt();
-            int[] a = new int [n];
-            int[] b = new int [n];
+            ArrayList<Gnome> gnomes = new ArrayList<>();
             for (int i = 0; i < n; i++) {
-                a[n] = scanner.nextInt();
+                gnomes.add(i, new Gnome(i + 1));
+                gnomes.get(i).a = scanner.nextInt();
             }
             for (int i = 0; i < n; i++) {
-                b[n] = scanner.nextInt();
+                gnomes.get(i).b = scanner.nextInt();
             }
             scanner.close();
+            gnomes.sort(Comparator.comparing(o -> o.a));
+            Collections.reverse(gnomes);
+            gnomes.sort(Comparator.comparing(o -> o.a));
+            Collections.reverse(gnomes);
             String out_str = "";
-
-
+            int comeToBedTotalTime = 0;
+            for (Gnome g :
+                    gnomes) {
+                comeToBedTotalTime += g.a;
+                if (comeToBedTotalTime - gnomes.get(0).a < gnomes.get(0).b) {
+                    out_str += g.index + " ";
+                } else {
+                    out_str = "-1";
+                    break;
+                }
+            }
+            System.out.println(out_str);
             FileWriter fileWriter = new FileWriter("OUTPUT.txt");
             fileWriter.write(out_str);
             fileWriter.close();
-        } catch (Exception e) {
+        } catch (IOException e) {
             System.out.println("Something wrong");
         }
     }
-    static int sort_through(int[] a, int[] b) {
+}
 
-        return 0;
+class Gnome {
+    public Gnome(int index) {
+        this.a = 0;
+        this.b = 0;
+        this.index = index;
     }
+
+    public Integer getA() {
+        return a;
+    }
+
+    public Integer getB() {
+        return b;
+    }
+
+    public Integer a, b;
+    public int index;
 }
