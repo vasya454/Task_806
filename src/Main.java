@@ -2,7 +2,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Scanner;
 
 public class Main {
@@ -18,12 +17,7 @@ public class Main {
             gnomes.get(i).b = scanner.nextInt();
         }
         scanner.close();
-        gnomes.sort(new Comparator<Gnome>() {
-            @Override
-            public int compare(Gnome o1, Gnome o2) {
-                return Integer.compare((o2.b - o1.a), (o1.b - o2.a));
-            }
-        });
+        gnomes.sort(Gnome::compareTo);
         String out_str = "";
         int comeToBedTotalTime = 0;
         for (Gnome g :
@@ -42,11 +36,16 @@ public class Main {
     }
 }
 
-class Gnome {
+class Gnome implements Comparable{
     public int a, b;
     public int index;
 
     public Gnome(int index) {
         this.index = index;
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        return (((Gnome)o).b - a) - (b - ((Gnome)o).a);
     }
 }
